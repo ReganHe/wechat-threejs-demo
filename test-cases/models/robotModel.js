@@ -18,7 +18,7 @@ export function renderModel(canvas, THREE) {
 
   function init() {
     camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.25, 100);
-    camera.position.set(-5, 3, 10);
+    camera.position.set(-5, 3, 14);
     camera.lookAt(new THREE.Vector3(0, 2, 0));
     scene = new THREE.Scene();
     clock = new THREE.Clock();
