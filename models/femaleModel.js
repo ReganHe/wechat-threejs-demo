@@ -1,6 +1,9 @@
 import {
   registerGLTFLoader
-} from '../../loaders/gltf-loader'
+} from '../libs/gltf-loader'
+import {
+  OrbitControls
+} from '../libs/OrbitControls'
 
 export function renderModel(canvas, THREE) {
   registerGLTFLoader(THREE)
@@ -14,9 +17,9 @@ export function renderModel(canvas, THREE) {
   animate();
 
   function init() {
-    camera = new THREE.PerspectiveCamera(90, canvas.width / canvas.height, 100, 10000);
-    camera.position.set(90, 180, 380);
-    camera.lookAt(new THREE.Vector3(0, 100, 0));
+    camera = new THREE.PerspectiveCamera(15, canvas.width / canvas.height, 0.25, 100);
+    camera.position.set(-5, 3, 10);
+    camera.lookAt(new THREE.Vector3(-0.65, 1, 0));
     scene = new THREE.Scene();
     clock = new THREE.Clock();
     // lights
@@ -28,11 +31,11 @@ export function renderModel(canvas, THREE) {
     scene.add(light);
     // model
     var loader = new THREE.GLTFLoader();
-    var modelUrl = 'models/tkf.glb';
+    var modelUrl = '3d/female.glb';
     loader.load(modelUrl, function (gltf) {
       model = gltf.scene;
       scene.add(model);
-      createGUI(model, gltf.animations);
+      createGUI(model, gltf.animations)
     }, undefined, function (e) {
       console.error(e);
     });
@@ -46,21 +49,33 @@ export function renderModel(canvas, THREE) {
     renderer.setClearAlpha(0);
     renderer.gammaOutput = true;
     renderer.gammaFactor = 2.2;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
   }
 
   function createGUI(model, animations) {
+    var states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
+    var emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
     mixer = new THREE.AnimationMixer(model);
     actions = {};
     for (var i = 0; i < animations.length; i++) {
       var clip = animations[i];
       var action = mixer.clipAction(clip);
       actions[clip.name] = action;
+      if (emotes.indexOf(clip.name) >= 0 || states.indexOf(clip.name) >= 4) {
+        action.clampWhenFinished = true;
+        action.loop = THREE.LoopOnce;
+      }
     }
 
-    activeAction = actions['animation_0'];
+    // expressions
+    face = model.getObjectByName('Head_2');
+    activeAction = actions['Running'];
     if (activeAction) {
       activeAction.play();
     }
+
   }
 
   function fadeToAction(name, duration) {

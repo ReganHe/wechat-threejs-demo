@@ -1,6 +1,6 @@
 import {
   registerGLTFLoader
-} from '../../loaders/gltf-loader'
+} from '../libs/gltf-loader'
 
 export function renderModel(canvas, THREE) {
   registerGLTFLoader(THREE)
@@ -15,8 +15,8 @@ export function renderModel(canvas, THREE) {
 
   function init() {
     camera = new THREE.PerspectiveCamera(90, canvas.width / canvas.height, 100, 10000);
-    camera.position.set(90, 180, 380);
-    camera.lookAt(new THREE.Vector3(100, -50, 0));
+    camera.position.set(100, 180, 1800);
+    camera.lookAt(new THREE.Vector3(-700, 0, 0));
     scene = new THREE.Scene();
     clock = new THREE.Clock();
     // lights
@@ -28,7 +28,7 @@ export function renderModel(canvas, THREE) {
     scene.add(light);
     // model
     var loader = new THREE.GLTFLoader();
-    var modelUrl = 'models/dlam.glb';
+    var modelUrl = '3d/fh.glb';
     loader.load(modelUrl, function (gltf) {
       model = gltf.scene;
       scene.add(model);

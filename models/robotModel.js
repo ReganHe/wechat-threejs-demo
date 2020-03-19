@@ -1,9 +1,9 @@
 import {
   registerGLTFLoader
-} from '../../loaders/gltf-loader'
+} from '../libs/gltf-loader'
 import {
   OrbitControls
-} from '../../jsm/controls/OrbitControls'
+} from '../libs/OrbitControls'
 
 export function renderModel(canvas, THREE) {
   registerGLTFLoader(THREE)
@@ -17,9 +17,9 @@ export function renderModel(canvas, THREE) {
   animate();
 
   function init() {
-    camera = new THREE.PerspectiveCamera(15, canvas.width / canvas.height, 0.25, 100);
-    camera.position.set(-5, 3, 10);
-    camera.lookAt(new THREE.Vector3(-0.65, 1, 0));
+    camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.25, 100);
+    camera.position.set(-5, 3, 14);
+    camera.lookAt(new THREE.Vector3(0, 2, 0));
     scene = new THREE.Scene();
     clock = new THREE.Clock();
     // lights
@@ -31,7 +31,8 @@ export function renderModel(canvas, THREE) {
     scene.add(light);
     // model
     var loader = new THREE.GLTFLoader();
-    var modelUrl = 'models/female.glb';
+    var modelUrl = 'https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb';
+    // var modelUrl = '3d/RobotExpressive.glb';
     loader.load(modelUrl, function (gltf) {
       model = gltf.scene;
       scene.add(model);

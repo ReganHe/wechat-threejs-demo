@@ -1,12 +1,20 @@
-import * as THREE from '../libs/three.weapp'
+import * as THREE from '../../libs/three.weapp'
 
-const { renderModel } = require('../test-cases/models/robotModel')
-// const { renderModel } = require('../test-cases/models/tkfModel')
-// const { renderModel } = require('../test-cases/models/dlamModel')
-// const { renderModel } = require('../test-cases/models/fhModel')
 // const {
 //   renderModel
-// } = require('../test-cases/models/femaleModel')
+// } = require('../../models/robotModel')
+// const {
+//   renderModel
+// } = require('../../models/tkfModel')
+// const {
+//   renderModel
+// } = require('../../models/dlamModel')
+// const {
+//   renderModel
+// } = require('../../models/fhModel')
+const {
+  renderModel
+} = require('../../models/femaleModel')
 
 const app = getApp()
 

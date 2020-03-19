@@ -1,9 +1,6 @@
 import {
   registerGLTFLoader
-} from '../../loaders/gltf-loader'
-import {
-  OrbitControls
-} from '../../jsm/controls/OrbitControls'
+} from '../libs/gltf-loader'
 
 export function renderModel(canvas, THREE) {
   registerGLTFLoader(THREE)
@@ -17,9 +14,9 @@ export function renderModel(canvas, THREE) {
   animate();
 
   function init() {
-    camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.25, 100);
-    camera.position.set(-5, 3, 14);
-    camera.lookAt(new THREE.Vector3(0, 2, 0));
+    camera = new THREE.PerspectiveCamera(90, canvas.width / canvas.height, 100, 10000);
+    camera.position.set(90, 180, 380);
+    camera.lookAt(new THREE.Vector3(100, -50, 0));
     scene = new THREE.Scene();
     clock = new THREE.Clock();
     // lights
@@ -31,12 +28,11 @@ export function renderModel(canvas, THREE) {
     scene.add(light);
     // model
     var loader = new THREE.GLTFLoader();
-    var modelUrl = 'https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb';
-    // var modelUrl = 'models/RobotExpressive.glb';
+    var modelUrl = '3d/dlam.glb';
     loader.load(modelUrl, function (gltf) {
       model = gltf.scene;
       scene.add(model);
-      createGUI(model, gltf.animations)
+      createGUI(model, gltf.animations);
     }, undefined, function (e) {
       console.error(e);
     });
@@ -50,33 +46,21 @@ export function renderModel(canvas, THREE) {
     renderer.setClearAlpha(0);
     renderer.gammaOutput = true;
     renderer.gammaFactor = 2.2;
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.update();
   }
 
   function createGUI(model, animations) {
-    var states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
-    var emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
     mixer = new THREE.AnimationMixer(model);
     actions = {};
     for (var i = 0; i < animations.length; i++) {
       var clip = animations[i];
       var action = mixer.clipAction(clip);
       actions[clip.name] = action;
-      if (emotes.indexOf(clip.name) >= 0 || states.indexOf(clip.name) >= 4) {
-        action.clampWhenFinished = true;
-        action.loop = THREE.LoopOnce;
-      }
     }
 
-    // expressions
-    face = model.getObjectByName('Head_2');
-    activeAction = actions['Running'];
+    activeAction = actions['animation_0'];
     if (activeAction) {
       activeAction.play();
     }
-
   }
 
   function fadeToAction(name, duration) {
